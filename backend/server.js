@@ -1,0 +1,124 @@
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
+const errorHandler = require('./middleware/errorHandler');
+const seedSecurities = require('./config/seedData');
+
+// Load environment variables
+dotenv.config();
+
+// Connect to database and seed
+connectDB().then((connected) => {
+  // Seed database after connection is established
+  if (connected) {
+    setTimeout(() => {
+      seedSecurities();
+    }, 3000); // Wait 3 seconds for DB to fully connect
+  }
+});
+
+// Initialize Express app
+const app = express();
+
+// Middleware
+app.use(helmet()); // Security headers
+app.use(morgan('dev')); // HTTP request logger
+// CORS configuration - Allow all origins in development
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // In development, allow all origins
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    
+    // In production, check against allowed origins
+    const allowedOrigins = process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [];
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.length === 0) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+})); // Enable CORS
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
+// Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/portfolio', require('./routes/portfolioRoutes'));
+app.use('/api/trade', require('./routes/tradeRoutes'));
+app.use('/api/markets', require('./routes/marketsRoutes'));
+app.use('/api/social', require('./routes/socialRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/alerts', require('./routes/alertRoutes'));
+
+// Health check route
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'TradeIn API is running',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Root route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to TradeIn API',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      portfolio: '/api/portfolio',
+      trade: '/api/trade',
+      markets: '/api/markets',
+      social: '/api/social',
+      admin: '/api/admin',
+    },
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found',
+  });
+});
+
+// Error handler middleware (must be last)
+app.use(errorHandler);
+
+// Start server
+const PORT = process.env.PORT || 5000;
+
+const server = app.listen(PORT, () => {
+  console.log(`\n🚀 TradeIn API Server running on port ${PORT}`);
+  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
+  console.log(`💚 Health Check: http://localhost:${PORT}/api/health\n`);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Promise Rejection:', err.message);
+  // Close server & exit process
+  server.close(() => process.exit(1));
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err.message);
+  process.exit(1);
+});
+
+module.exports = app;
