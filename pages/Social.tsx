@@ -317,11 +317,11 @@ export const Social: React.FC = () => {
                     onChange={(e) => setNewPostContent(e.target.value)}
                     placeholder="Share your investment ideas... Use #tags for stocks/crypto (e.g., #BTC, #RELIANCE)"
                     className="w-full h-32 bg-surfaceLight rounded-xl p-4 text-textPrimary placeholder-textSecondary focus:outline-none focus:ring-1 focus:ring-primary mb-4 resize-none"
-                    maxLength={5000}
+                    maxLength={5005}
                   ></textarea>
 
                   <div className="flex justify-between items-center">
-                      <span className="text-xs text-textSecondary">{newPostContent.length}/5000</span>
+                      <span className="text-xs text-textSecondary">{newPostContent.length}/5005</span>
                       <button 
                         onClick={handleCreatePost}
                         disabled={!newPostContent.trim()}

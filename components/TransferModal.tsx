@@ -66,8 +66,8 @@ export const TransferModal: React.FC<TransferModalProps> = ({
   };
 
   const quickAmounts = type === 'deposit' 
-    ? [1000, 5000, 10000] 
-    : [1000, 5000, Math.floor(currentBalance)];
+    ? [1000, 5005, 10000] 
+    : [1000, 5005, Math.floor(currentBalance)];
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">

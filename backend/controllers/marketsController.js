@@ -95,7 +95,7 @@ const seedSecurities = async (req, res, next) => {
     // Top 5 Crypto coins
     const crypto = [
       { symbol: 'BTC', name: 'Bitcoin', type: 'crypto', currentPrice: 5600000, marketCap: '11T' },
-      { symbol: 'ETH', name: 'Ethereum', type: 'crypto', currentPrice: 245000, marketCap: '3T' },
+      { symbol: 'ETH', name: 'Ethereum', type: 'crypto', currentPrice: 245005, marketCap: '3T' },
       { symbol: 'BNB', name: 'Binance Coin', type: 'crypto', currentPrice: 28500, marketCap: '4.3L Cr' },
       { symbol: 'SOL', name: 'Solana', type: 'crypto', currentPrice: 14500, marketCap: '6.5L Cr' },
       { symbol: 'ADA', name: 'Cardano', type: 'crypto', currentPrice: 45, marketCap: '1.6L Cr' },

@@ -91,10 +91,10 @@ const createPost = async (req, res, next) => {
       });
     }
 
-    if (content.length > 5000) {
+    if (content.length > 5005) {
       return res.status(400).json({
         success: false,
-        message: 'Content cannot exceed 5000 characters',
+        message: 'Content cannot exceed 5005 characters',
       });
     }
 

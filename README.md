@@ -58,7 +58,7 @@ A full-stack fintech application for stock and cryptocurrency trading, built wit
    MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/tradein_db?retryWrites=true&w=majority
    JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
    JWT_EXPIRE=30d
-   PORT=5000
+   PORT=5005
    NODE_ENV=development
    ```
 
@@ -69,7 +69,7 @@ A full-stack fintech application for stock and cryptocurrency trading, built wit
    npm run dev
    ```
 
-The backend server will run on `http://localhost:5000`
+The backend server will run on `http://localhost:5005`
 
 ### Frontend Setup
 
@@ -83,9 +83,9 @@ The backend server will run on `http://localhost:5000`
    npm install
    ```
 
-3. **Create `.env` file (optional - defaults to localhost:5000):**
+3. **Create `.env` file (optional - defaults to localhost:5005):**
    ```env
-   VITE_API_URL=http://localhost:5000/api
+   VITE_API_URL=http://localhost:5005/api
    ```
 
 4. **Start the development server:**

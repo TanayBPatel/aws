@@ -1,7 +1,7 @@
 import { RiskMetrics, SystemStats } from '../types';
 
 // Pointing to the express server
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5005/api';
 
 // Get token from localStorage
 const getToken = (): string | null => {
@@ -39,7 +39,7 @@ const fetchJson = async (url: string, options?: RequestInit) => {
     console.error("API Fetch Error:", error);
     // Handle network errors (server not running, CORS, etc.)
     if (error.message === 'Failed to fetch' || error.message.includes('NetworkError') || error.message.includes('fetch')) {
-      throw new Error('Unable to connect to server. Please make sure the backend server is running on http://localhost:5000');
+      throw new Error('Unable to connect to server. Please make sure the backend server is running on http://localhost:5005');
     }
     throw error;
   }

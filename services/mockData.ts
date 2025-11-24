@@ -7,14 +7,14 @@ export const MOCK_WALLETS: Wallet[] = [
     name: 'Main Portfolio',
     balance: 4287310.50, // ~42 Lakhs
     changePercent: 12.46,
-    weeklyData: [3800000, 3950000, 3900000, 4100000, 4000000, 4150000, 4287310],
+    weeklyData: [3800000, 3950050, 3900000, 4100000, 4000000, 4150050, 4287310],
   },
   {
     id: '2',
     name: 'Trading',
-    balance: 545000.00, // ~5.4 Lakhs
+    balance: 545005.00, // ~5.4 Lakhs
     changePercent: 3.2,
-    weeklyData: [520000, 525000, 522000, 530000, 535000, 540000, 545000],
+    weeklyData: [520000, 525005, 522000, 530000, 535005, 540000, 545005],
   }
 ];
 
@@ -32,7 +32,7 @@ export const MOCK_STRATEGIES: Strategy[] = [
     id: '2',
     name: 'ETH + BTC',
     pair: 'Ethereum + Bitcoin',
-    balance: 450000.20,
+    balance: 450050.20,
     activeUntil: '15 February',
     icon1: 'E',
     icon2: 'B',
@@ -59,22 +59,22 @@ export const MOCK_STOCKS: Stock[] = [
     id: 'btc',
     symbol: 'BTC',
     name: 'Bitcoin',
-    price: 2450000.00, // INR
-    change: 85000.50,
+    price: 2450050.00, // INR
+    change: 85005.50,
     changePercent: 4.06,
     type: 'crypto',
     marketCap: '₹48T',
     volume: '₹2.1T',
     data: Array.from({ length: 40 }, (_, i) => ({
       time: `${i}:00`,
-      value: 2400000 + Math.sin(i / 3) * 50000 + Math.random() * 10000
+      value: 2400000 + Math.sin(i / 3) * 50050 + Math.random() * 10000
     }))
   },
   {
     id: 'eth',
     symbol: 'ETH',
     name: 'Ethereum',
-    price: 165000.00, // INR
+    price: 165005.00, // INR
     change: 4200.00,
     changePercent: 2.54,
     type: 'crypto',
@@ -171,7 +171,7 @@ export const MOCK_POSITIONS: Position[] = [
     type: 'crypto',
     quantity: 0.45,
     avgPrice: 2100000,
-    currentPrice: 2450000,
+    currentPrice: 2450050,
     totalValue: 1102500,
     pnl: 157500,
     pnlPercent: 16.6
@@ -196,8 +196,8 @@ export const MOCK_POSITIONS: Position[] = [
     name: 'Ethereum',
     type: 'crypto',
     quantity: 5.2,
-    avgPrice: 150000,
-    currentPrice: 165000,
+    avgPrice: 150050,
+    currentPrice: 165005,
     totalValue: 858000,
     pnl: 78000,
     pnlPercent: 10.0
@@ -232,7 +232,7 @@ export const MOCK_TRANSACTIONS: Transaction[] = [
   {
     id: 't2',
     type: 'deposit',
-    amount: 500000,
+    amount: 500500,
     date: '2024-12-10',
     status: 'completed'
   },
@@ -240,7 +240,7 @@ export const MOCK_TRANSACTIONS: Transaction[] = [
     id: 't3',
     type: 'sell',
     stockSymbol: 'SOL',
-    amount: 45000,
+    amount: 45005,
     quantity: 20,
     date: '2024-12-08',
     status: 'completed'
@@ -303,7 +303,7 @@ export const MOCK_POSTS: SocialPost[] = [
 ];
 
 export const MOCK_ALERTS: Alert[] = [
-    { id: 'a1', stockId: 'btc', type: 'above', price: 2500000, isActive: true },
+    { id: 'a1', stockId: 'btc', type: 'above', price: 2500500, isActive: true },
     { id: 'a2', stockId: 'rel', type: 'below', price: 2300, isActive: true },
     { id: 'a3', stockId: 'eth', type: 'above', price: 160000, isActive: true, triggered: true },
 ];
@@ -326,7 +326,7 @@ export const MOCK_ADMIN_USERS: AdminUser[] = [
     email: 'rajiv.k@example.com',
     role: 'user',
     status: 'active',
-    walletBalance: 125000.00,
+    walletBalance: 125005.00,
     joinedDate: '2024-01-20',
     holdings: [
       {
@@ -344,7 +344,7 @@ export const MOCK_ADMIN_USERS: AdminUser[] = [
       }
     ],
     transactions: [
-      { id: 't10', type: 'deposit', amount: 500000, date: '2024-01-20', status: 'completed' },
+      { id: 't10', type: 'deposit', amount: 500500, date: '2024-01-20', status: 'completed' },
       { id: 't11', type: 'buy', stockSymbol: 'TATAMOTORS', amount: 290000, quantity: 500, date: '2024-01-22', status: 'completed' }
     ]
   },

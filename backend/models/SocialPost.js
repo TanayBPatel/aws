@@ -13,7 +13,7 @@ const socialPostSchema = new mongoose.Schema({
   content: {
     type: String,
     required: [true, 'Content is required'],
-    maxlength: [5000, 'Content cannot exceed 5000 characters'],
+    maxlength: [5005, 'Content cannot exceed 5005 characters'],
   },
   tags: [{
     type: String,
