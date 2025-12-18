@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, ArrowDownCircle, ArrowUpCircle, Check } from 'lucide-react';
-import { api } from '../frontend/services/api';
+import { api } from '../services/api';
 
 interface TransferModalProps {
   isOpen: boolean;
@@ -10,12 +10,12 @@ interface TransferModalProps {
   onSuccess?: () => void; // Callback to refresh portfolio data
 }
 
-export const TransferModal: React.FC<TransferModalProps> = ({ 
-  isOpen, 
-  type, 
-  onClose, 
+export const TransferModal: React.FC<TransferModalProps> = ({
+  isOpen,
+  type,
+  onClose,
   currentBalance,
-  onSuccess 
+  onSuccess
 }) => {
   const [amount, setAmount] = useState('');
   const [step, setStep] = useState<'input' | 'processing' | 'success' | 'error'>('input');
@@ -25,7 +25,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({
 
   const handleConfirm = async () => {
     const amountNum = parseFloat(amount);
-    
+
     if (!amount || amountNum <= 0) {
       setError('Please enter a valid amount');
       return;
@@ -65,14 +65,14 @@ export const TransferModal: React.FC<TransferModalProps> = ({
     }
   };
 
-  const quickAmounts = type === 'deposit' 
-    ? [1000, 5005, 10000] 
+  const quickAmounts = type === 'deposit'
+    ? [1000, 5005, 10000]
     : [1000, 5005, Math.floor(currentBalance)];
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-bgDark md:bg-cardDark w-full md:w-[420px] rounded-t-[32px] md:rounded-[32px] border-t md:border border-borderBase p-6 shadow-2xl relative transition-colors duration-300">
-        
+
         {step === 'input' && (
           <>
             <div className="flex justify-between items-center mb-8">
@@ -95,8 +95,8 @@ export const TransferModal: React.FC<TransferModalProps> = ({
               <label className="text-textSecondary text-xs font-medium uppercase mb-2 block">Enter Amount</label>
               <div className="relative">
                 <span className="absolute left-0 top-1/2 -translate-y-1/2 text-3xl font-medium text-textSecondary opacity-50">₹</span>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   value={amount}
                   onChange={(e) => {
                     setAmount(e.target.value);
@@ -127,14 +127,13 @@ export const TransferModal: React.FC<TransferModalProps> = ({
               ))}
             </div>
 
-            <button 
+            <button
               onClick={handleConfirm}
               disabled={!amount || parseFloat(amount) <= 0 || (type === 'withdraw' && parseFloat(amount) > currentBalance)}
-              className={`w-full h-14 rounded-2xl font-semibold text-lg shadow-lg flex items-center justify-center transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${
-                type === 'deposit' 
-                  ? 'bg-accentLime text-bgDark hover:bg-accentLime/90 shadow-accentLime/20' 
+              className={`w-full h-14 rounded-2xl font-semibold text-lg shadow-lg flex items-center justify-center transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${type === 'deposit'
+                  ? 'bg-accentLime text-bgDark hover:bg-accentLime/90 shadow-accentLime/20'
                   : 'bg-error text-white hover:bg-error/90 shadow-error/20'
-              }`}
+                }`}
             >
               Confirm {type}
             </button>

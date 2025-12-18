@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, MessageCircle, Share2, Edit, X, Send, ChevronDown, ChevronUp } from 'lucide-react';
-import { api } from '../frontend/services/api';
+import { api } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Social: React.FC = () => {
@@ -74,11 +74,11 @@ export const Social: React.FC = () => {
 
   const handleCreatePost = async () => {
     if (!newPostContent.trim()) return;
-    
+
     try {
       // Extract tags from content (words starting with #)
       const tags = newPostContent.match(/#\w+/g)?.map(tag => tag.substring(1)) || [];
-      
+
       const result = await api.createPost(newPostContent, tags);
       if (result.success) {
         setNewPostContent('');
@@ -113,8 +113,8 @@ export const Social: React.FC = () => {
     setExpandedComments(newExpanded);
   };
 
-  const displayedPosts = activeTab === 'trending' 
-    ? posts 
+  const displayedPosts = activeTab === 'trending'
+    ? posts
     : posts.filter(p => following.includes(p.user.id) || p.user.id === user?.id);
 
   if (loading) {
@@ -130,35 +130,33 @@ export const Social: React.FC = () => {
       {/* Header */}
       <header className="pt-2 mb-6 flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-textPrimary">Community</h1>
-        <button 
-            onClick={() => setIsCreateModalOpen(true)}
-            className="w-10 h-10 rounded-full border border-borderBase flex items-center justify-center hover:bg-surfaceLight transition-colors text-textPrimary"
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="w-10 h-10 rounded-full border border-borderBase flex items-center justify-center hover:bg-surfaceLight transition-colors text-textPrimary"
         >
-            <Edit size={20} />
+          <Edit size={20} />
         </button>
       </header>
 
       {/* Tabs */}
       <div className="flex gap-6 mb-6 border-b border-borderBase px-2">
-        <button 
-            onClick={() => setActiveTab('trending')}
-            className={`pb-3 text-lg font-medium transition-all ${
-                activeTab === 'trending' 
-                ? 'text-textPrimary border-b-2 border-accentLime' 
-                : 'text-textSecondary hover:text-textPrimary'
+        <button
+          onClick={() => setActiveTab('trending')}
+          className={`pb-3 text-lg font-medium transition-all ${activeTab === 'trending'
+              ? 'text-textPrimary border-b-2 border-accentLime'
+              : 'text-textSecondary hover:text-textPrimary'
             }`}
         >
-            Trending
+          Trending
         </button>
-        <button 
-            onClick={() => setActiveTab('following')}
-            className={`pb-3 text-lg font-medium transition-all ${
-                activeTab === 'following' 
-                ? 'text-textPrimary border-b-2 border-accentLime' 
-                : 'text-textSecondary hover:text-textPrimary'
+        <button
+          onClick={() => setActiveTab('following')}
+          className={`pb-3 text-lg font-medium transition-all ${activeTab === 'following'
+              ? 'text-textPrimary border-b-2 border-accentLime'
+              : 'text-textSecondary hover:text-textPrimary'
             }`}
         >
-            Following
+          Following
         </button>
       </div>
 
@@ -174,41 +172,40 @@ export const Social: React.FC = () => {
               <div key={post.id} className="bg-cardDark p-5 rounded-2xl border border-borderBase shadow-sm">
                 {/* User Info */}
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-surfaceLighter flex items-center justify-center text-textPrimary font-bold border border-borderBase">
-                        {post.user.avatar || post.user.name.charAt(0)}
-                    </div>
-                    <div className="flex-1">
-                        <h4 className="text-textPrimary font-medium leading-tight">{post.user.name}</h4>
-                        <p className="text-xs text-textSecondary">{post.user.handle || `@${post.user.name.toLowerCase().replace(/\s+/g, '_')}`} • {post.timeAgo || 'Just now'}</p>
-                    </div>
-                    {!isCurrentUser && (
-                        <button 
-                          onClick={() => handleFollow(post.user.id)}
-                          className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${
-                            isFollowingUser 
-                              ? 'text-primary bg-primary/10 hover:bg-primary/20' 
-                              : 'text-primary bg-primary/10 hover:bg-primary/20'
-                          }`}
-                        >
-                            {isFollowingUser ? 'Following' : 'Follow'}
-                        </button>
-                    )}
+                  <div className="w-10 h-10 rounded-full bg-surfaceLighter flex items-center justify-center text-textPrimary font-bold border border-borderBase">
+                    {post.user.avatar || post.user.name.charAt(0)}
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-textPrimary font-medium leading-tight">{post.user.name}</h4>
+                    <p className="text-xs text-textSecondary">{post.user.handle || `@${post.user.name.toLowerCase().replace(/\s+/g, '_')}`} • {post.timeAgo || 'Just now'}</p>
+                  </div>
+                  {!isCurrentUser && (
+                    <button
+                      onClick={() => handleFollow(post.user.id)}
+                      className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-colors ${isFollowingUser
+                          ? 'text-primary bg-primary/10 hover:bg-primary/20'
+                          : 'text-primary bg-primary/10 hover:bg-primary/20'
+                        }`}
+                    >
+                      {isFollowingUser ? 'Following' : 'Follow'}
+                    </button>
+                  )}
                 </div>
 
                 {/* Content */}
                 <p className="text-textPrimary text-sm leading-relaxed mb-3 whitespace-pre-wrap">
-                    {post.content}
+                  {post.content}
                 </p>
 
                 {/* Tags */}
                 {post.tags && post.tags.length > 0 && (
-                    <div className="flex gap-2 mb-4 flex-wrap">
-                        {post.tags.map((tag: string) => (
-                            <span key={tag} className="text-xs font-medium text-accentPurple bg-accentPurple/10 px-2 py-1 rounded-md">
-                                #{tag}
-                            </span>
-                        ))}
-                    </div>
+                  <div className="flex gap-2 mb-4 flex-wrap">
+                    {post.tags.map((tag: string) => (
+                      <span key={tag} className="text-xs font-medium text-accentPurple bg-accentPurple/10 px-2 py-1 rounded-md">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
                 )}
 
                 {/* Comments Section */}
@@ -254,85 +251,84 @@ export const Social: React.FC = () => {
 
                 {/* Actions */}
                 <div className="flex items-center justify-between pt-3 border-t border-borderBase">
-                    <button 
-                        onClick={() => handleLike(post.id)}
-                        className={`flex items-center gap-1.5 text-sm transition-colors ${
-                          post.isLiked ? 'text-error' : 'text-textSecondary hover:text-textPrimary'
-                        }`}
-                    >
-                        <Heart size={18} fill={post.isLiked ? "currentColor" : "none"} />
-                        <span>{post.likesCount || post.likes?.length || 0}</span>
-                    </button>
-                    
-                    <button 
-                      onClick={() => toggleComments(post.id)}
-                      className="flex items-center gap-1.5 text-sm text-textSecondary hover:text-textPrimary transition-colors"
-                    >
-                        <MessageCircle size={18} />
-                        <span>{post.commentsCount || post.comments?.length || 0}</span>
-                        {showComments ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                    </button>
+                  <button
+                    onClick={() => handleLike(post.id)}
+                    className={`flex items-center gap-1.5 text-sm transition-colors ${post.isLiked ? 'text-error' : 'text-textSecondary hover:text-textPrimary'
+                      }`}
+                  >
+                    <Heart size={18} fill={post.isLiked ? "currentColor" : "none"} />
+                    <span>{post.likesCount || post.likes?.length || 0}</span>
+                  </button>
 
-                    <button className="flex items-center gap-1.5 text-sm text-textSecondary hover:text-textPrimary transition-colors">
-                        <Share2 size={18} />
-                        <span>Share</span>
-                    </button>
+                  <button
+                    onClick={() => toggleComments(post.id)}
+                    className="flex items-center gap-1.5 text-sm text-textSecondary hover:text-textPrimary transition-colors"
+                  >
+                    <MessageCircle size={18} />
+                    <span>{post.commentsCount || post.comments?.length || 0}</span>
+                    {showComments ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                  </button>
+
+                  <button className="flex items-center gap-1.5 text-sm text-textSecondary hover:text-textPrimary transition-colors">
+                    <Share2 size={18} />
+                    <span>Share</span>
+                  </button>
                 </div>
               </div>
             );
           })
         ) : (
           <div className="text-center py-10 text-textSecondary">
-            {activeTab === 'following' 
-              ? "You aren't following anyone yet. Switch to Trending to find traders!" 
+            {activeTab === 'following'
+              ? "You aren't following anyone yet. Switch to Trending to find traders!"
               : "No posts found."}
           </div>
         )}
       </div>
 
       {/* Floating Action Button */}
-      <button 
+      <button
         onClick={() => setIsCreateModalOpen(true)}
         className="fixed bottom-24 right-6 w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/30 hover:bg-primary/90 active:scale-95 transition-transform md:hidden z-40"
       >
-          <Edit size={24} />
+        <Edit size={24} />
       </button>
 
       {/* Create Post Modal */}
       {isCreateModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-              <div className="bg-cardDark w-full max-w-md rounded-3xl border border-borderBase p-6 shadow-2xl">
-                  <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg font-semibold text-textPrimary">New Note</h3>
-                      <button 
-                        onClick={() => setIsCreateModalOpen(false)}
-                        className="w-8 h-8 rounded-full bg-surfaceLight flex items-center justify-center text-textPrimary hover:bg-surfaceLighter"
-                      >
-                          <X size={18} />
-                      </button>
-                  </div>
-                  
-                  <textarea 
-                    value={newPostContent}
-                    onChange={(e) => setNewPostContent(e.target.value)}
-                    placeholder="Share your investment ideas... Use #tags for stocks/crypto (e.g., #BTC, #RELIANCE)"
-                    className="w-full h-32 bg-surfaceLight rounded-xl p-4 text-textPrimary placeholder-textSecondary focus:outline-none focus:ring-1 focus:ring-primary mb-4 resize-none"
-                    maxLength={5005}
-                  ></textarea>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-cardDark w-full max-w-md rounded-3xl border border-borderBase p-6 shadow-2xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-textPrimary">New Note</h3>
+              <button
+                onClick={() => setIsCreateModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-surfaceLight flex items-center justify-center text-textPrimary hover:bg-surfaceLighter"
+              >
+                <X size={18} />
+              </button>
+            </div>
 
-                  <div className="flex justify-between items-center">
-                      <span className="text-xs text-textSecondary">{newPostContent.length}/5005</span>
-                      <button 
-                        onClick={handleCreatePost}
-                        disabled={!newPostContent.trim()}
-                        className="px-6 py-2 bg-primary text-white rounded-xl font-medium flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                      >
-                          <Send size={16} />
-                          Post
-                      </button>
-                  </div>
-              </div>
+            <textarea
+              value={newPostContent}
+              onChange={(e) => setNewPostContent(e.target.value)}
+              placeholder="Share your investment ideas... Use #tags for stocks/crypto (e.g., #BTC, #RELIANCE)"
+              className="w-full h-32 bg-surfaceLight rounded-xl p-4 text-textPrimary placeholder-textSecondary focus:outline-none focus:ring-1 focus:ring-primary mb-4 resize-none"
+              maxLength={5005}
+            ></textarea>
+
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-textSecondary">{newPostContent.length}/5005</span>
+              <button
+                onClick={handleCreatePost}
+                disabled={!newPostContent.trim()}
+                className="px-6 py-2 bg-primary text-white rounded-xl font-medium flex items-center gap-2 hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                <Send size={16} />
+                Post
+              </button>
+            </div>
           </div>
+        </div>
       )}
     </div>
   );

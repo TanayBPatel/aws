@@ -11,13 +11,14 @@ import { Settings } from './pages/Settings';
 import { History } from './pages/History';
 import { Social } from './pages/Social';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { RiskAssessment } from './pages/RiskAssessment';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // Protected Route Component
-const ProtectedRoute: React.FC<{ children: React.ReactElement; requireAdmin?: boolean }> = ({ 
-  children, 
-  requireAdmin = false 
+const ProtectedRoute: React.FC<{ children: React.ReactElement; requireAdmin?: boolean }> = ({
+  children,
+  requireAdmin = false
 }) => {
   const { isAuthenticated, user, loading } = useAuth();
 
@@ -49,75 +50,83 @@ const App: React.FC = () => {
             {/* Auth routes */}
             <Route path="/login" element={<Layout><Auth /></Layout>} />
             <Route path="/register" element={<Layout><Auth /></Layout>} />
-            
+
             {/* User Routes - Protected */}
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
                 <ProtectedRoute>
                   <Layout><Dashboard /></Layout>
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/stock/:id" 
+            <Route
+              path="/stock/:id"
               element={
                 <ProtectedRoute>
                   <Layout><StockDetail /></Layout>
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/markets" 
+            <Route
+              path="/markets"
               element={
                 <ProtectedRoute>
                   <Layout><Markets /></Layout>
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/portfolio" 
+            <Route
+              path="/portfolio"
               element={
                 <ProtectedRoute>
                   <Layout><Portfolio /></Layout>
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/social" 
+            <Route
+              path="/portfolio/risk"
+              element={
+                <ProtectedRoute>
+                  <Layout><RiskAssessment /></Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/social"
               element={
                 <ProtectedRoute>
                   <Layout><Social /></Layout>
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/settings" 
+            <Route
+              path="/settings"
               element={
                 <ProtectedRoute>
                   <Layout><Settings /></Layout>
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/history" 
+            <Route
+              path="/history"
               element={
                 <ProtectedRoute>
                   <Layout><History /></Layout>
                 </ProtectedRoute>
-              } 
+              }
             />
-            
+
             {/* Admin Route - Protected with admin role */}
-            <Route 
-              path="/admin" 
+            <Route
+              path="/admin"
               element={
                 <ProtectedRoute requireAdmin={true}>
                   <AdminDashboard />
                 </ProtectedRoute>
-              } 
+              }
             />
-            
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Bell, Check } from 'lucide-react';
-import { api } from '../frontend/services/api';
+import { api } from '../services/api';
 
 interface AlertModalProps {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose, stock, 
 
   const handleSave = async () => {
     const priceNum = parseFloat(price);
-    
+
     if (!price || priceNum <= 0) {
       setError('Please enter a valid price');
       return;
@@ -34,7 +34,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose, stock, 
       if (!result.success) {
         throw new Error(result.message || 'Failed to create alert');
       }
-      
+
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
@@ -52,7 +52,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose, stock, 
   return (
     <div className="fixed inset-0 z-[60] flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-bgDark md:bg-cardDark w-full md:w-[400px] rounded-t-[32px] md:rounded-[32px] border-t md:border border-borderBase p-6 shadow-2xl relative">
-        
+
         {!success ? (
           <>
             <div className="flex justify-between items-center mb-6">
@@ -76,52 +76,50 @@ export const AlertModal: React.FC<AlertModalProps> = ({ isOpen, onClose, stock, 
             </p>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <button 
+              <button
                 onClick={() => {
                   setType('above');
                   setError('');
                 }}
-                className={`py-3 rounded-xl border text-sm font-medium transition-all ${
-                  type === 'above' 
-                    ? 'bg-primary/20 border-primary text-primary' 
+                className={`py-3 rounded-xl border text-sm font-medium transition-all ${type === 'above'
+                    ? 'bg-primary/20 border-primary text-primary'
                     : 'bg-cardDark border-borderBase text-textSecondary hover:bg-surfaceLight'
-                }`}
+                  }`}
               >
                 Above
               </button>
-              <button 
+              <button
                 onClick={() => {
                   setType('below');
                   setError('');
                 }}
-                className={`py-3 rounded-xl border text-sm font-medium transition-all ${
-                  type === 'below' 
-                    ? 'bg-error/20 border-error text-error' 
+                className={`py-3 rounded-xl border text-sm font-medium transition-all ${type === 'below'
+                    ? 'bg-error/20 border-error text-error'
                     : 'bg-cardDark border-borderBase text-textSecondary hover:bg-surfaceLight'
-                }`}
+                  }`}
               >
                 Below
               </button>
             </div>
 
             <div className="mb-8 relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-textSecondary">₹</span>
-                <input 
-                  type="number" 
-                  value={price}
-                  onChange={(e) => {
-                    setPrice(e.target.value);
-                    setError('');
-                  }}
-                  className="w-full bg-surfaceLight border border-borderBase rounded-xl py-4 pl-8 pr-4 text-xl font-semibold text-textPrimary focus:outline-none focus:border-primary"
-                  disabled={loading}
-                />
-                <p className="text-right text-xs text-textSecondary mt-2">
-                    Current Price: ₹{(stock.price || stock.currentPrice || 0).toLocaleString('en-IN')}
-                </p>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-textSecondary">₹</span>
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                  setError('');
+                }}
+                className="w-full bg-surfaceLight border border-borderBase rounded-xl py-4 pl-8 pr-4 text-xl font-semibold text-textPrimary focus:outline-none focus:border-primary"
+                disabled={loading}
+              />
+              <p className="text-right text-xs text-textSecondary mt-2">
+                Current Price: ₹{(stock.price || stock.currentPrice || 0).toLocaleString('en-IN')}
+              </p>
             </div>
 
-            <button 
+            <button
               onClick={handleSave}
               disabled={loading || !price || parseFloat(price) <= 0}
               className="w-full h-14 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 shadow-lg shadow-primary/20 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
