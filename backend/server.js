@@ -52,23 +52,47 @@ app.use(cors({
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
-// Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/portfolio', require('./routes/portfolioRoutes'));
-app.use('/api/trade', require('./routes/tradeRoutes'));
-app.use('/api/markets', require('./routes/marketsRoutes'));
-app.use('/api/social', require('./routes/socialRoutes'));
-app.use('/api/admin', require('./routes/adminRoutes'));
-app.use('/api/alerts', require('./routes/alertRoutes'));
+// Route modules (loaded once, mounted at two prefixes each)
+const authRoutes = require('./routes/authRoutes');
+const portfolioRoutes = require('./routes/portfolioRoutes');
+const tradeRoutes = require('./routes/tradeRoutes');
+const marketsRoutes = require('./routes/marketsRoutes');
+const socialRoutes = require('./routes/socialRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const alertRoutes = require('./routes/alertRoutes');
 
-// Health check route
-app.get('/api/health', (req, res) => {
+// Mount routes at BOTH /api/... and /... prefixes (no logic duplication)
+app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
+app.use('/api/portfolio', portfolioRoutes);
+app.use('/portfolio', portfolioRoutes);
+
+app.use('/api/trade', tradeRoutes);
+app.use('/trade', tradeRoutes);
+
+app.use('/api/markets', marketsRoutes);
+app.use('/markets', marketsRoutes);
+
+app.use('/api/social', socialRoutes);
+app.use('/social', socialRoutes);
+
+app.use('/api/admin', adminRoutes);
+app.use('/admin', adminRoutes);
+
+app.use('/api/alerts', alertRoutes);
+app.use('/alerts', alertRoutes);
+
+// Health check route (both prefixes)
+const healthHandler = (req, res) => {
   res.status(200).json({
     success: true,
     message: 'TradeIn API is running',
     timestamp: new Date().toISOString(),
   });
-});
+};
+app.get('/api/health', healthHandler);
+app.get('/health', healthHandler);
 
 // Root route
 app.get('/', (req, res) => {
@@ -77,12 +101,14 @@ app.get('/', (req, res) => {
     message: 'Welcome to TradeIn API',
     version: '1.0.0',
     endpoints: {
-      auth: '/api/auth',
-      portfolio: '/api/portfolio',
-      trade: '/api/trade',
-      markets: '/api/markets',
-      social: '/api/social',
-      admin: '/api/admin',
+      auth: '/api/auth  or  /auth',
+      portfolio: '/api/portfolio  or  /portfolio',
+      trade: '/api/trade  or  /trade',
+      markets: '/api/markets  or  /markets',
+      social: '/api/social  or  /social',
+      admin: '/api/admin  or  /admin',
+      alerts: '/api/alerts  or  /alerts',
+      health: '/api/health  or  /health',
     },
   });
 });
@@ -104,8 +130,8 @@ const PORT = process.env.PORT || 5005;
 const server = app.listen(PORT, () => {
   console.log(`\n🚀 TradeIn API Server running on port ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
-  console.log(`💚 Health Check: http://localhost:${PORT}/api/health\n`);
+  console.log(`🔗 API URLs: http://0.0.0.0:${PORT}/api  and  http://0.0.0.0:${PORT}`);
+  console.log(`💚 Health Check: http://0.0.0.0:${PORT}/health\n`);
 });
 
 // Handle unhandled promise rejections
