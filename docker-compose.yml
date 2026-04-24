@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  backend:
+    build: ./backend
+    expose:
+      - "5005"
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
