@@ -26,29 +26,8 @@ const app = express();
 // Middleware
 app.use(helmet()); // Security headers
 app.use(morgan('dev')); // HTTP request logger
-// CORS configuration - Allow all origins in development
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    // In development, allow all origins
-    if (process.env.NODE_ENV !== 'production') {
-      return callback(null, true);
-    }
-    
-    // In production, check against allowed origins
-    const allowedOrigins = process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [];
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.length === 0) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-})); // Enable CORS
+// CORS - Allow all origins
+app.use(cors());
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
