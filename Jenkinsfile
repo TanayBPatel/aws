@@ -26,18 +26,20 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                sh '''
-                docker run --rm \
-                  -e SONAR_HOST_URL="http://172.17.0.1:9000" \
-                  -e SONAR_LOGIN="$SONAR_TOKEN" \
-                  -v $(pwd):/usr/src \
-                  sonarsource/sonar-scanner-cli
-                '''
-            }
-        }
-
+stage('SonarQube Analysis') {
+steps {
+        sh '''
+        docker run --rm \
+          -e SONAR_HOST_URL=http://172.17.0.1:9000 \
+          -e SONAR_TOKEN=$SONAR_TOKEN \
+          -v $(pwd):/usr/src \
+          sonarsource/sonar-scanner-cli \
+          -Dsonar.projectKey=aws-devops \
+          -Dsonar.sources=. \
+          -Dsonar.login=$SONAR_TOKEN
+        '''
+    }
+}
         stage('Build & Run') {
             steps {
                 sh '''
