@@ -27,15 +27,16 @@ pipeline {
         }
 
 stage('SonarQube Analysis') {
-steps {
+    steps {
         sh '''
         docker run --rm \
+          --network host \
           -e SONAR_HOST_URL=http://localhost:9000 \
           -e SONAR_TOKEN=$SONAR_TOKEN \
           -v $(pwd):/usr/src \
           sonarsource/sonar-scanner-cli \
           -Dsonar.projectKey=aws-devops \
-          -Dsonar.sources=. \
+          -Dsonar.sources=.
         '''
     }
 }
