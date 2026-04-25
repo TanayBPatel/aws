@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    tools {
+        sonarScanner 'sonar'
+    }
+
+    environment {
+        SONAR_TOKEN = credentials('sonar-token')
+    }
+
     stages {
 
         stage('Setup Env') {
@@ -19,6 +27,20 @@ pipeline {
                 # Frontend .env
                 echo "VITE_API_URL=/api" > frontend/.env
                 '''
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh '''
+                    sonar-scanner \
+                      -Dsonar.projectKey=aws-devops \
+                      -Dsonar.sources=. \
+                      -Dsonar.host.url=http://localhost:9000 \
+                      -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
             }
         }
 
