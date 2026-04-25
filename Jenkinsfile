@@ -35,7 +35,7 @@ stage('SonarQube Analysis') {
           sonarsource/sonar-scanner-cli \
           -Dsonar.projectKey=aws-devops \
           -Dsonar.sources=. \
-          -Dsonar.login=squ_18533076296c21270d3a2f1634c767aaa3273cb9
+          -Dsonar.login=squ_289bcd81b304c3c1b534bae464d473f196656b1e
         '''
     }
 }
