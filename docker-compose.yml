@@ -3,6 +3,8 @@ version: "3"
 services:
   backend:
     build: ./backend
+    ports:
+      - "5005:5005"
     expose:
       - "5005"
     env_file:
@@ -14,3 +16,18 @@ services:
       - "80:80"
     depends_on:
       - backend
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - backend
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3001:3000"
