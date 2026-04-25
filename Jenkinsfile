@@ -44,7 +44,8 @@ steps {
             steps {
                 sh '''
                 docker-compose down || true
-                docker-compose up --build -d
+                docker rm -f $(docker ps -aq) 2>/dev/null || true
+		docker-compose up --build -d
                 '''
             }
         }
