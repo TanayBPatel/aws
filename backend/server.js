@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const client = require('prom-client');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 const seedSecurities = require('./config/seedData');
@@ -90,6 +91,14 @@ app.get('/', (req, res) => {
       health: '/api/health  or  /health',
     },
   });
+});
+
+// Prometheus metrics
+client.collectDefaultMetrics();
+
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', client.register.contentType);
+  res.end(await client.register.metrics());
 });
 
 // 404 handler
