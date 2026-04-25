@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        sonarRunner 'sonar'
-    }
-
     environment {
         SONAR_TOKEN = credentials('sonar-token')
     }
@@ -32,15 +28,13 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonar') {
-                    sh '''
-                    sonar-scanner \
-                      -Dsonar.projectKey=aws-devops \
-                      -Dsonar.sources=. \
-                      -Dsonar.host.url=http://localhost:9000 \
-                      -Dsonar.login=$SONAR_TOKEN
-                    '''
-                }
+                sh '''
+                docker run --rm \
+                  -e SONAR_HOST_URL="http://172.17.0.1:9000" \
+                  -e SONAR_LOGIN="$SONAR_TOKEN" \
+                  -v $(pwd):/usr/src \
+                  sonarsource/sonar-scanner-cli
+                '''
             }
         }
 
